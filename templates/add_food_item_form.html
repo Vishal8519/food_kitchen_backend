@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Modal Header -->
+<div class="modal-header">
+  <h5 class="modal-title" id="editModal{{ food_item.id }}Label">Add Food Item</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal Body -->
+<div class="modal-body">
+  <form id="addFoodItemForm" class="login-container">
+    <!-- Add form fields for the food item details -->
+    <div class="mb-3 signup-form__content">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control signup-text-field" id="name" name="name" required>
+    </div>
+    <div class="mb-3 signup-form__content">
+      <label for="image" class="form-label">Image</label>
+      <input type="file" class="form-control signup-text-field" id="image" name="image">
+    </div>
+    <div class="mb-3 signup-form__content">
+      <label for="price" class="form-label">Price</label>
+      <input type="number" class="form-control signup-text-field" id="price" name="price" required>
+    </div>
+    <div class="mb-3 signup-form__content">
+      <label for="isAvailable" class="form-label">Available</label>
+      <input type="checkbox" class="form-check-input signup-text-field" id="isAvailable" name="is_available">
+    </div>
+
+    <button type="button" class="btn btn-primary signup-form__button" id="addFoodItemBtn">Add Food Item</button>
+  </form>
+</div>
+
+<!-- Modal Footer -->
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
+
+<!-- JavaScript to handle form submission -->
+<script>
+  $(document).ready(function() {
+    $('#addFoodItemBtn').click(function() {
+      // Capture form data
+      const formData = new FormData($('#addFoodItemForm')[0]);
+
+      // Send data to the server
+      $.ajax({
+        url: '/add_food_item/',  // Update with the appropriate URL for your Django view
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          // Handle success response
+          console.log('Food item added successfully.');
+          // You can close the modal or update the UI as needed
+        },
+        error: function(xhr, status, error) {
+          // Handle error response
+          console.error('Error adding food item:', error);
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">{{ 'Edit Food Item' if food_item_id else 'Add Food Item' }}</h1>
+  
+
+  <form method="post" enctype="multipart/form-data" class="login-container">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{ food_item.name if food_item_id else '' }}">
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input type="number" class="form-control" id="price" name="price" value="{{ food_item.price if food_item_id else '' }}">
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Image</label>
+      <input type="file" class="form-control" id="image" name="image">
+    </div>
+    <div class="mb-3">
+      <label for="isAvailable" class="form-label">Available</label>
+      <input type="checkbox" class="form-check-input" id="isAvailable" name="is_available" {% if food_item.is_available %}checked{% endif %}>
+    </div>
+    <button type="submit" class="btn btn-primary">
+      {{ 'Save Changes' if food_item_id else 'Add Food Item' }}
+    </button>
+  </form>
+</div>
+{% endblock %}

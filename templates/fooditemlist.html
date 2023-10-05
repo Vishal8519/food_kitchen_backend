@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Food Items</h1>
+
+  <button type="button" class="btn btn-success mb-3" id="addFoodItemBtn">
+  Add New Food Item
+    </button>
+  
+
+  <table class="table table-striped" id="foodItemsDataTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Available</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for food_item in food_items %}
+      <tr>
+        <td>{{ food_item.id }}</td>
+        <td>{{ food_item.name }}</td>
+        <td>{{ food_item.price }}</td>
+        <td>{{ food_item.is_available }}</td>
+        <td>
+          <button type="button" class="btn btn-primary" >
+            Edit
+          </button>
+        </td>
+      </tr>
+
+      <!-- Edit Modal -->
+      
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+    document.getElementById("addFoodItemBtn").addEventListener("click", function() {
+        window.location.href = "{% url 'add_food_items' %}";
+      });
+</script>
+
+  
+{% endblock %}
