@@ -78,7 +78,7 @@
                         <path d="M4 11l16 0"></path>
                         <path d="M8 15h2v2h-2z"></path>
                       </svg>
-                      <span class="link hide">Calendar</span>
+                      <span class="link hide">Today's Special</span>
                     </a>
                   </li>
                   <li>
@@ -140,6 +140,21 @@
     </body>
 <script>
 
+  // function loadContent(menuId) {
+  //   const contentSection = document.querySelector('.table-secction');
+  //   const url = `/load_content/${menuId}`;  // Replace with your Django endpoint to fetch data
+  
+  //   // Fetch data using AJAX
+  //   fetch(url)
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // Update the content section with the fetched data
+  //       contentSection.innerHTML = data.html_content;
+  //     })
+  //     .catch(error => console.error('Error:', error));
+  // }
+  
+  
   function loadContent(menuId) {
     const contentSection = document.querySelector('.table-secction');
     const url = `/load_content/${menuId}`;  // Replace with your Django endpoint to fetch data
@@ -150,10 +165,18 @@
       .then(data => {
         // Update the content section with the fetched data
         contentSection.innerHTML = data.html_content;
+
+        // Save the selected menu item to local storage
+        localStorage.setItem('selectedMenuItem', menuId);
       })
       .catch(error => console.error('Error:', error));
   }
-  
+
+  // Load the content for the selected menu item from local storage on page load
+  const selectedMenuItem = localStorage.getItem('selectedMenuItem');
+  if (selectedMenuItem) {
+    loadContent(selectedMenuItem);
+  }
     
   </script>
    

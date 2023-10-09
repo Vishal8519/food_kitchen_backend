@@ -164,3 +164,31 @@ $(document).ready(function() {
 document.getElementById("addFoodItemBtn").addEventListener("click", function() {
   window.location.href = "{% url 'add_food_item_page' %}";
 });
+
+
+
+function saveFoodItem() {
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const imageInput = document.getElementById('image');
+    const imageFile = imageInput.files[0];
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('image', imageFile);
+
+    fetch('/add_food_item/', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),  // Include CSRF token
+      },
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Data saved successfully:', data);
+        $('#exampleModal').modal('hide');
+      })
+      .catch(error => console.error('Error:', error));
+  }

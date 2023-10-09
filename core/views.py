@@ -131,10 +131,12 @@ def add_food_item(request):
         # Get data from the AJAX request
         name = request.POST.get('name')
         price = request.POST.get('price')
+        image = request.FILES.get('image')
         is_available = request.POST.get('is_available') == 'true'
 
         # Save the new food item to the database
-        food_item = FoodItem.objects.create(name=name, price=price, is_available=is_available)
+        food_item = FoodItem.objects.create(name=name, price=price, is_available=is_available, image= image)
+        food_item.save()
 
         # Return a JSON response indicating success
         return JsonResponse({'success': True, 'message': 'Food item added successfully.'})
