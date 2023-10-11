@@ -54,18 +54,32 @@ confirmPassword.addEventListener('change', onChange);
 
 
 
-function togglePasswordVisibility() {
-    const passwordField = document.getElementById('password');
-    const showPasswordIcon = document.querySelector('.show-password');
+// function togglePasswordVisibility() {
+//     const passwordField = document.getElementById('password');
+//     const showPasswordIcon = document.querySelector('.show-password');
     
-    if (passwordField.type === 'password') {
-        passwordField.type = 'text';
-        showPasswordIcon.innerHTML = '&#128064;';  // Show hide icon
-    } else {
-        passwordField.type = 'password';
-        showPasswordIcon.innerHTML = '&#128065;';  // Show hide icon
-    }
+//     if (passwordField.type === 'password') {
+//         passwordField.type = 'text';
+//         showPasswordIcon.innerHTML = '&#128064;';  // Show hide icon
+//     } else {
+//         passwordField.type = 'password';
+//         showPasswordIcon.innerHTML = '&#128065;';  // Show hide icon
+//     }
+// }
+
+function togglePasswordVisibility(inputId) {
+  const passwordInput = document.getElementById(inputId);
+  const icon = document.querySelector('.show-password');
+
+  if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.innerHTML = '&#128064;';  // Change to hide password icon
+  } else {
+      passwordInput.type = 'password';
+      icon.innerHTML = '&#128065;';  // Change to show password icon
+  }
 }
+
 
 
 const menuLink = document.querySelector('.link');

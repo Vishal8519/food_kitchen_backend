@@ -32,7 +32,10 @@
     <div class="signup-centering">
         <div class="signup-form">
             <div class="signup-welcome-row">
-                <img class="signup-welcome-image" alt="Logo" src="/static/assets/logo.svg">
+                {% comment %} <img class="signup-welcome-image" alt="Logo" src="/static/assets/logo.svg">
+                 {% endcomment %}
+                <img class="signup-welcome-image" alt="Logo" src="/static/assets/myphoto.png">
+
                 <h1>Sign Up / Login</h1>
             </div>
             <form method="post" action="{% url 'login' %}">

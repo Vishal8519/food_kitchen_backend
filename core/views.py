@@ -7,6 +7,7 @@ from django.contrib import messages
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
+from django import forms
 
 from ajax_datatable.views import AjaxDatatableView
 from .models import *
@@ -44,60 +45,159 @@ class FoodItemSerializer(serializers.ModelSerializer):
         model = FoodItem
         fields = '__all__'
 
-class FoodItemAPIView(APIView):
-    def get(self, request):
-        food_items = FoodItem.objects.all()
-        serializer = FoodItemSerializer(food_items, many=True)
-        return Response(serializer.data)
     
+@api_view(['GET'])
+def FoodItems(request):
+    food_items = FoodItem.objects.all()
+    serializers = FoodItemSerializer(food_items, many =True)
+    return Response(serializers.data)
 
-# def food_items_list(request):
-#     context = {
-#         "url": reverse('ajax_datatable_food_items_list'),  # Update the URL to match your URL configuration
-#         "title": "Food Items",
-#         "add_hx_button": [{"url": reverse('add_food_items'), "text": "Add Food Item"}],
-#     }
-#     return render(request, 'render_ajax_datatable.html', context)
+class CartItemSerializer(serializers.ModelSerializer):
+    food_item = FoodItemSerializer()  # Use FoodItemSerializer for the food_item field
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'food_item', 'quantity']
 
 
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
 
-# class FoodItemDatatableView(AjaxDatatableView):
+    class Meta:
+        model = ShoppingCart
+        fields = ['id', 'items']
 
-#     model = FoodItem
-#     title = "Food Items"
-#     length_menu = [[10, 20, 30, 50], [10, 20, 30, 50]]
-#     search_values_separator = '+'
-#     column_defs = [
-#         {'name': 'id', 'title': 'ID', 'visible': True, 'orderable': True},
-#         {'name': 'name', 'title': 'Name', 'visible': True, 'orderable': True},
-#         {'name': 'price', 'title': 'Price', 'visible': True, 'orderable': True},
-#         {'name': 'is_available', 'title': 'Available', 'visible': True, 'orderable': True},
-#         {'name': 'action', 'visible': True, 'placeholder': True, 'orderable': False, 'searchable': False},
-#     ]
 
-#     def customize_row(self, row, obj):
-#         row['action'] = '''
-#             <td class="text-end">
-#                 <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-#                 <span class="svg-icon svg-icon-5 m-0">
-#                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-#                         <path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="currentColor"></path>
-#                     </svg>
-#                 </span>
-#                 </a>
-#                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true" style="">
-#                     <div class="menu-item px-3">
-#                         <a href="%s" class="menu-link px-3">Edit</a>
-#                     </div>
-#                 </div>
-#             </td>
-#         ''' % reverse('food_item_edit', args=(obj.id,))
+# @csrf_exempt
+# @api_view(['POST'])
+# def add_to_cart(request):
+#     if request.method == 'POST':
+#         food_item_id = request.data.get('item_id')
 
-#     def get_initial_queryset(self, request, *args, **kwargs):
-#         return self.model.objects.all()
+#         try:
+#             food_item = FoodItem.objects.get(id=food_item_id)
+#         except FoodItem.DoesNotExist:
+#             return Response({'error': 'Food item not found'}, status=status.HTTP_404_NOT_FOUND)
 
-from django import forms
+#         cart, _ = Cart.objects.get_or_create(pk=1)  # Assuming there's only one cart
 
+#         # Create or update the cart item
+#         cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
+#         if not created:
+#             cart_item.quantity += 1
+#             cart_item.save()
+
+#         # Serialize the cart item with the correct serializer
+#         serializer = CartItemSerializer(cart_item)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def add_to_cart(request):
+    if request.method == 'POST':
+        food_item_id = request.data.get('item_id')
+
+        try:
+            food_item = FoodItem.objects.get(id=food_item_id)
+        except FoodItem.DoesNotExist:
+            return Response({'error': 'Food item not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Assuming there's only one cart
+        cart, created = ShoppingCart.objects.get_or_create(pk=1)
+
+        # Create a new cart item for the food item
+        cart_item = CartItem.objects.create(cart=cart, food_item=food_item)
+
+        # Serialize the cart item with the correct serializer
+        serializer = CartItemSerializer(cart_item)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# @csrf_exempt
+# @api_view(['POST'])
+# def remove_from_cart(request):
+#     if request.method == 'POST':
+#         food_item_id = request.data.get('item_id')
+
+#         try:
+#             food_item = FoodItem.objects.get(id=food_item_id)
+#         except FoodItem.DoesNotExist:
+#             return Response({'error': 'Food item not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#         cart, _ = Cart.objects.get_or_create(pk=1)  # Assuming there's only one cart
+
+#         try:
+#             cart_item = CartItem.objects.get(cart=cart, food_item=food_item)
+#         except CartItem.DoesNotExist:
+#             return Response({'error': 'Food item not in cart'}, status=status.HTTP_404_NOT_FOUND)
+
+#         if cart_item.quantity > 1:
+#             cart_item.quantity -= 1
+#             cart_item.save()
+#         else:
+#             cart_item.delete()
+
+#         # Serialize the cart item with the correct serializer
+#         serializer = CartItemSerializer(cart_item)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def remove_from_cart(request):
+    if request.method == 'POST':
+        food_item_id = request.data.get('item_id')
+
+        try:
+            food_item = FoodItem.objects.get(id=food_item_id)
+        except FoodItem.DoesNotExist:
+            return Response({'error': 'Food item not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Assuming there's only one cart
+        cart, _ = ShoppingCart.objects.get_or_create(pk=1)
+
+        try:
+            # Try to get the cart item for the specified food item
+            cart_item = CartItem.objects.filter(cart=cart, food_item=food_item).first()
+
+            if cart_item:
+                # If the cart item exists, delete it
+                cart_item.delete()
+                return Response({'message': 'Food item removed from cart'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Food item not in cart'}, status=status.HTTP_404_NOT_FOUND)
+
+        except CartItem.DoesNotExist:
+            return Response({'error': 'Food item not in cart'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def cart_list(request):
+    try:
+        cart = ShoppingCart.objects.get(pk=1)  # Assuming there's only one cart
+    except ShoppingCart.DoesNotExist:
+        return Response({'error': 'Cart not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Serialize the cart and its items
+    cart_serializer = CartSerializer(cart)
+    cart_data = cart_serializer.data
+
+    # Get cart items for the cart and serialize them
+    cart_items = cart.cartitem_set.all()
+    cart_item_serializer = CartItemSerializer(cart_items, many=True)
+
+    # Add the serialized cart items to the cart data
+    cart_data['items'] = cart_item_serializer.data
+
+    return Response(cart_data)
+
+
+def cart_count(request):
+    try:
+        # Assuming there's only one cart for simplicity
+        cart = ShoppingCart.objects.get(pk=1)
+        cart_count = cart.cartitem_set.count()  # Count the cart items
+        return JsonResponse({'cart_count': cart_count})
+    except ShoppingCart.DoesNotExist:
+        return JsonResponse({'cart_count': 0})
+    
+# DASH BOARD
 class FoodItemForm(forms.ModelForm):
     class Meta:
         model = FoodItem
@@ -160,7 +260,7 @@ def load_content(request, menu_id):
     if menu_id == 'all_food_items':
         food_items = FoodItem.objects.all()
         html_content = render_to_string('fooditemlist.html', {'food_items': food_items})
-        
+
     elif menu_id == 'add_food_item':
         if request.method == 'POST':
             # If a POST request, process the form data
@@ -180,5 +280,7 @@ def load_content(request, menu_id):
         html_content = ''  # Handle other menu IDs accordingly
 
     return JsonResponse({'html_content': html_content})
+
+
 
 
