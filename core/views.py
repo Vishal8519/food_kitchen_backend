@@ -167,6 +167,7 @@ def remove_from_cart(request):
             return Response({'error': 'Food item not in cart'}, status=status.HTTP_404_NOT_FOUND)
 
 
+@csrf_exempt
 @api_view(['GET'])
 def cart_list(request):
     try:
@@ -174,16 +175,7 @@ def cart_list(request):
     except ShoppingCart.DoesNotExist:
         return Response({'error': 'Cart not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # Serialize the cart and its items
-    cart_serializer = CartSerializer(cart)
-    cart_data = cart_serializer.data
-
-    # Get cart items for the cart and serialize them
-    cart_items = cart.cartitem_set.all()
-    cart_item_serializer = CartItemSerializer(cart_items, many=True)
-
-    # Add the serialized cart items to the cart data
-    cart_data['items'] = cart_item_serializer.data
+    cart_data = cart.serialize
 
     return Response(cart_data)
 
@@ -196,6 +188,22 @@ def cart_count(request):
         return JsonResponse({'cart_count': cart_count})
     except ShoppingCart.DoesNotExist:
         return JsonResponse({'cart_count': 0})
+    
+
+# @api_view(['GET'])
+# def get_cart_items(request):
+#     try:
+#         # Get the current active cart
+#         cart = ShoppingCart.objects.get(is_current=True)
+
+#         # Get cart items for the active cart
+#         cart_items = CartItem.objects.filter(cart=cart)
+
+#         # Serialize and return the cart items
+#         serializer = CartItemSerializer(cart_items, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#     except CartItem.DoesNotExist:
+#         return Response({'error': 'Cart items not found'}, status=status.HTTP_404_NOT_FOUND)
     
 # DASH BOARD
 class FoodItemForm(forms.ModelForm):
