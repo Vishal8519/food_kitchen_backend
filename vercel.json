@@ -1,8 +1,7 @@
 {
   "functions": {
     "api": {
-      "runtime": "python3.8", 
-      "handler": "food_kitchen/wsgi.handler" 
+      "runtime": "python3.8"
     }
   },
   "builds": [
