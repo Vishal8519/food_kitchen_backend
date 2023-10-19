@@ -1,4 +1,4 @@
-Django==3.2.8
-djangorestframework==3.12.4
-django-cors-headers==3.9.0
+Django==4.0.3
+djangorestframework==3.14.0
+django-cors-headers==4.2.0
 django-ajax-datatable==2.4
