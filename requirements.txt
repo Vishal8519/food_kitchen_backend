@@ -1,4 +1,4 @@
-
+python == 3.9.0
 asgiref==3.5.2
 asttokens==2.2.1
 async-timeout==4.0.2
