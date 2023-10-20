@@ -1,22 +1,14 @@
+
 {
-  "functions": {
-    "api": {
-      "runtime": "python3.8"
-    }
-  },
-  "builds": [
-    {
-      "src": "food_kitchen/wsgi.py",
-      "use": "@ardnt/vercel-python-wsgi",
-      "config": {
-        "maxLambdaSize": "15mb"
-      }
-    }
-  ],
+  "builds": [{
+      "src": "djangoprojectname/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+  }],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "food_kitchen/wsgi.py"
-    }
+      {
+          "src": "/(.*)",
+          "dest": "djangoprojectname/wsgi.py"
+      }
   ]
 }
