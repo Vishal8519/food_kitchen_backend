@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "core",
+    'django.contrib.gis',
     "rest_framework",
     "corsheaders",
     "ajax_datatable",
