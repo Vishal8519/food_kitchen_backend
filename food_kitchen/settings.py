@@ -91,26 +91,27 @@ WSGI_APPLICATION = "food_kitchen.wsgi.application"
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'NAME': 'foodweb',
-#         'USER': 'foodweb',
-#         'PASSWORD': '1234',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db-3ylv253hmwmp',
-        'USER': 'db-3ylv253hmwmp',
-        'PASSWORD': '6vQb2vHKDOlC4tORkvP3yQCJ',  # Replace 'your_password' with your actual database password.
-        'HOST': 'up-pl-waw1-mysql-1.db.run-on-erla.com',
-        'PORT': '11550',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'fb+2b6g362g+dE3g3b*5Cd-F6Dbe-4-D',
+        'HOST': 'viaduct.proxy.rlwy.net',
+        'PORT': '14171',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'db-3ylv253hmwmp',
+#         'USER': 'db-3ylv253hmwmp',
+#         'PASSWORD': '6vQb2vHKDOlC4tORkvP3yQCJ',  # Replace 'your_password' with your actual database password.
+#         'HOST': 'up-pl-waw1-mysql-1.db.run-on-erla.com',
+#         'PORT': '11550',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
