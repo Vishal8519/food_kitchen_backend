@@ -101,6 +101,16 @@ DATABASES = {
 #         'PORT': '5432',
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db-3ylv253hmwmp',
+        'USER': 'db-3ylv253hmwmp',
+        'PASSWORD': '6vQb2vHKDOlC4tORkvP3yQCJ',  # Replace 'your_password' with your actual database password.
+        'HOST': 'up-pl-waw1-mysql-1.db.run-on-erla.com',
+        'PORT': '11550',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
