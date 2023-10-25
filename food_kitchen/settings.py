@@ -91,14 +91,24 @@ WSGI_APPLICATION = "food_kitchen.wsgi.application"
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'fb+2b6g362g+dE3g3b*5Cd-F6Dbe-4-D',
+#         'HOST': 'viaduct.proxy.rlwy.net',
+#         'PORT': '14171',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'fb+2b6g362g+dE3g3b*5Cd-F6Dbe-4-D',
-        'HOST': 'viaduct.proxy.rlwy.net',
-        'PORT': '14171',
+        'PASSWORD': 'Ramram8519@',
+        'HOST': 'db.dmdeyvmuxwlxqqxnnfzu.supabase.co',
+        'PORT': '5432',
     }
 }
 
